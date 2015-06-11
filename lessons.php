@@ -5,6 +5,8 @@
     </head>
     <body
         <?php
+            
+            //-----------------------------------------------------------------
             class Lesson
             {
                 private $duration;
@@ -72,6 +74,8 @@
                 print "<a> $str; </a> <br>";
             }
             
+            //-----------------------------------------------------------------
+            
             class Preferences
             {
                 private $prop = array();
@@ -109,6 +113,8 @@
             $str = $prep2->getProperty("name");
             print "<a> $str </a>"; 
 
+            //------------------------------------------------------------------
+            
             abstract class ApptEncoder
             {
                 abstract function encode();
@@ -158,8 +164,157 @@
             $str .= "отправка в  формате Bloggs: " . $blog->getApptEncoder()->encode();
             
              print "<a> $str </a>"; 
-
             
+             
+             //-----------------------------------------------------------------
+             abstract class Sea
+             {
+                 abstract function getSea();
+                 abstract function setId($id);
+                 abstract function printId();
+             }
+             
+             class EarthSea extends Sea
+             {
+                 private $id;
+                 function setId($id)
+                 {
+                     $this->id = $id;
+                     print "<br> $this->id <br>";
+                 }
+                 function printId()
+                 {
+                     print "<br> $this->id <br>";
+                 }
+                 function getSea() 
+                 {
+                     return "EarthSea";
+                 }
+             }
+             
+             class MarsSea extends Sea
+             {
+                 function setId($id)
+                 {
+                     $this->id = $id;
+                 }
+                 function printId()
+                 {
+                     print "<br> $this->id <br>";
+                 }
+                 function getSea()
+                 {
+                     return "MarsSea";
+                 }
+             }
+             
+             abstract class Plaints
+             {
+                 abstract function getPlaints();
+                 
+             }
+             
+             class EarthPlaints extends Plaints
+             {
+                 function getPlaints() 
+                 {
+                     return "EarthPlaints";
+                 }
+             }
+             
+             class MarsPlaints extends Plaints
+             {
+                 function getPlaints()
+                 {
+                     return "MarsPlaints";
+                 }
+             }
+            
+             abstract class Forest
+             {
+                 abstract function getForest();
+                 
+             }
+             
+             class EarthForest extends Forest
+             {
+                 function getForest() 
+                 {
+                     return "EarthForest";
+                 }
+             }
+             
+             class MarsForest extends Forest
+             {
+                 function getForest()
+                 {
+                     return "MarsForest";
+                 }
+             }
+             
+             class TerrainFactory
+             {
+                 private $sea;
+                 private $plaints;
+                 private $forest;
+                 
+                 function __construct(Sea $sea, Plaints $plaints, Forest $forest) 
+                {
+                     $this->sea = $sea;
+                     $this->plaints = $plaints;
+                     $this->forest = $forest;
+                 }
+                 function setSeaId($id)
+                 {
+                     $this->sea->setId($id);
+                 }
+                 function printSea()
+                 {
+                     $this->sea->printId();
+                 }
+
+
+                 function cloneSea()
+                 {
+                     return clone $this->sea;
+                 }
+                 
+                 function clonePlaints()
+                 {
+                     return clone $this->plaints;
+                 }
+                 function cloneForest()
+                 {
+                     return clone $this->forest;
+                 }
+                 
+             }
+             
+             $earthFactory = new TerrainFactory(new EarthSea(), new EarthPlaints, new EarthForest);
+             $marsFactory = new TerrainFactory(new MarsSea(), new MarsPlaints, new EarthForest);
+             print "<br>";
+             $earthStr = "Sea - " . $earthFactory->cloneSea()->getSea() . "; "; 
+             $earthStr .= "Plaints - " . $earthFactory->clonePlaints()->getPlaints() . "; ";
+             $earthStr .= "Forest - " . $earthFactory->cloneForest()->getForest() . "; ";
+             
+             $marsStr = "Sea - " . $marsFactory->cloneSea()->getSea() . "; "; 
+             $marsStr .= "Plaints - " . $marsFactory->clonePlaints()->getPlaints() . "; ";
+             $marsStr .= "Forest - " . $marsFactory->cloneForest()->getForest() . "; ";
+             
+             $earthFactory->setSeaId(10);
+            // $earthFactory->printSea();
+             $cloneFactory = clone $earthFactory;
+             $cloneFactory->printSea();
+             $earthFactory->setSeaId(20);
+             $cloneFactory->printSea();
+             
+                     
+             print "<br> $earthStr <br>";
+             
+             print "<br> $marsStr <br>";
+             
+             
+             
         ?>
     </body>
 </html>
