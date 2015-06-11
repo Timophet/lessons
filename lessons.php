@@ -72,6 +72,42 @@
                 print "<a> $str; </a> <br>";
             }
             
+            class Preferences
+            {
+                private $prop = array();
+                private static $instance;
+                private function __construct() 
+                {
+                    ;
+                }
+                
+                public function getInstance()
+                {
+                    if(empty (self::$instance))
+                    {
+                        self::$instance = new Preferences();
+                    }
+                    return self::$instance;
+                }
+
+                public function setProperty ($key, $val)
+                {
+                    $this->prop[$key] = $val;
+                }
+                public function getProperty ($key)
+                {
+                    return $this->prop[$key];
+                }
+                
+            }
+            $prep = Preferences::getInstance();
+            $prep->setProperty("name", "Иван");
+            unset($prep);
+            
+            $prep2 = Preferences::getInstance();
+            
+            $str = $prep2->getProperty("name");
+            print "<a> $str </a>"; 
 
         ?>
     </body>
