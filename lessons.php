@@ -109,6 +109,57 @@
             $str = $prep2->getProperty("name");
             print "<a> $str </a>"; 
 
+            abstract class ApptEncoder
+            {
+                abstract function encode();
+            }
+            
+            class BloggsApptEncoder extends ApptEncoder
+            {
+                function encode() 
+                {
+                    return "Данные о встрече в формате BloggsCal";
+                }
+            }
+            class MegaApptEncoder extends ApptEncoder
+            {
+                function encode() 
+                {
+                    return "Данные о встрече в формате MegaCal";
+                }
+            }
+            
+            abstract class CommsManager
+            {
+                abstract function getHeaderText();
+                abstract function getApptEncoder();
+                abstract function getFooterText();
+                            
+            }
+            
+            class BlogsCommsManager extends CommsManager
+            {
+                function getHeaderText()
+                {
+                    return "BloggsCal верхний колонтитул";
+                }
+                function getApptEncoder() 
+                {
+                    return new BloggsApptEncoder();
+                }
+                function getFooterText()
+                {
+                    return "BloggsCal нижний колонтитул";
+                }
+            }
+            
+            $blog = new BlogsCommsManager();
+            $str = "header -" . $blog->getHeaderText() . "; Footer - " . $blog->getFooterText() . "<br>";
+            $str .= "отправка в  формате Bloggs: " . $blog->getApptEncoder()->encode();
+            
+             print "<a> $str </a>"; 
+
+            
         ?>
     </body>
 </html>
